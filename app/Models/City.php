@@ -13,6 +13,10 @@ class City extends Model
         'city_name'
     ];
 
+    protected $hidden =[
+        'created_at',
+        'updated_at'
+    ];
     /**
      * city relation to state
      */
