@@ -2,8 +2,13 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Models\Error;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -13,7 +18,7 @@ class Handler extends ExceptionHandler
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
     protected $levels = [
-        //
+       
     ];
 
     /**
@@ -22,7 +27,8 @@ class Handler extends ExceptionHandler
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+         // AuthorizationException::class,
+        // HttpException::class,
     ];
 
     /**
@@ -39,10 +45,40 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $exception, $request) {
+            $user_id = 1;
+            
+            if (Auth::user()) {
+                $user_id = Auth::user()->id;
+            }
+            //dd($user_id);
+            $data = array(
+                'user_id'   => $user_id,
+                'code'      => $exception->getCode(),
+                'file'      => $exception->getFile(),
+                'line'      => $exception->getLine(),
+                'message'   => $exception->getMessage(),
+                'trace'     => $exception->getTraceAsString(),
+            );
+            //dd($data);
+            Error::create($data);
+            //return 'ok';
+            
+            if($exception instanceof AuthenticationException)
+            {
+                return error("Can't access this page without Login!!!",type:'unauthenticated');
+            }
+           else if($exception instanceof RouteNotFoundException)
+            {
+                return error("Can't access this page without Login!!!",type:'unauthenticated');
+            }
+
+            else if($exception instanceof NotFoundHttpException)
+            {
+                return error(type:'notfound');
+            }
         });
     }
 }

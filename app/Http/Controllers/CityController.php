@@ -67,7 +67,11 @@ class CityController extends Controller
      * Get State By Id
      */
     public function get($id){
-        $city = City::findOrFail($id);
+        $city = City::find($id);
+        if($city){
         return success('Get City Data By ID',$city);
+        }
+        return error('Record Not Found',type:'notfound');
     }
+
 }

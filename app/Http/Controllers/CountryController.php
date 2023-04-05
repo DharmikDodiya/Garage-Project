@@ -67,7 +67,10 @@ class CountryController extends Controller
      * Get Country By Id
      */
     public function get($id){
-        $country = Country::findOrFail($id);
-        return success('Get Country Data By ID',$country);
+        $country = Country::find($id);
+        if($country){
+            return success('Get Country Data By ID',$country);
+        }
+        return error('Record Not Found',type:'notfound');
     }
 }

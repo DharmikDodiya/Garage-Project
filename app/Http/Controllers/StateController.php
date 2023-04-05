@@ -68,7 +68,10 @@ class StateController extends Controller
      * Get State By Id
      */
     public function get($id){
-        $state = State::findOrFail($id);
+        $state = State::find($id);
+        if($state){
         return success('Get State Data By ID',$state);
+       }
+       return error('Rocord Not Found',type:'notfound');
     }
 }
