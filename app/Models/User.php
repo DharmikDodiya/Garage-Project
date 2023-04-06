@@ -18,9 +18,19 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'type',
+        'billable_name',
+        'address1',
+        'zip_code',
+        'phone',
+        'profile_picture',
         'email',
         'password',
+        'city_id',
+        'token',
+        'service_type_id'
     ];
 
     /**
@@ -31,6 +41,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -41,4 +53,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * User Many To Many RelationShip On ServiceType
+     */
+    public function serviceTypes(){
+        return $this->belongsToMany(ServiceType::class,'user_service_types','user_id','service_type_id');
+    }
 }

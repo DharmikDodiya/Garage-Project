@@ -5,8 +5,11 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use function PHPSTORM_META\type;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,15 +22,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
+
+/**
+ * UnAuthenicated Routes
+ */
 Route::controller(AuthController::class)->group(function(){
     Route::post('register','register');
+    Route::get('verifyuser/{token}','verifyAccount');
+    Route::post('login','login');
+    Route::post('forget-password','forgetPassword');
+    Route::get('resetPassword','forgetPasswordView');
+    Route::post('reset-Password','resetPassword');
 });
 
-Route::controller(CountryController::class)->prefix('country')->group(function(){
+
+/**
+ * Authenicated Routes
+ */
+Route::middleware('auth:api')->group(function(){
+
+/**
+ * User Authenicated Routes
+ */
+Route::controller(UserController::class)->group(function(){
+    Route::post('change-password','changePassword');
+    Route::get('user-profile','userProfile');
+    Route::get('logout','logout');
+});
+
+
+/**
+ * Country Routes
+ */
+Route::controller(CountryController::class)->middleware(['type:admin'])->prefix('country')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
     Route::patch('update/{id}','update');
@@ -35,7 +63,10 @@ Route::controller(CountryController::class)->prefix('country')->group(function()
     Route::get('get/{id}','get');
 });
 
-Route::controller(StateController::class)->prefix('state')->group(function(){
+/**
+ * State Routes
+ */
+Route::controller(StateController::class)->middleware(['type:admin'])->prefix('state')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
     Route::patch('update/{id}','update');
@@ -43,7 +74,10 @@ Route::controller(StateController::class)->prefix('state')->group(function(){
     Route::get('get/{id}','get');
 });
 
-Route::controller(CityController::class)->prefix('city')->group(function(){
+/**
+ * City Routes
+ */
+Route::controller(CityController::class)->middleware(['type:admin'])->prefix('city')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
     Route::patch('update/{id}','update');
@@ -51,10 +85,15 @@ Route::controller(CityController::class)->prefix('city')->group(function(){
     Route::get('get/{id}','get');
 });
 
+/**
+ * ServiceType Routes
+ */
 Route::controller(ServiceTypeController::class)->prefix('service-type')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
     Route::patch('update/{id}','update');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
+});
+
 });
