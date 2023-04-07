@@ -17,6 +17,7 @@ class TypeCheckPermission
     public function handle(Request $request, Closure $next ,$type)
     {
         $user = Auth::user();
+        //dd($type);
         //dd($user->type);
         if($user->type == $type){
             return $next($request);

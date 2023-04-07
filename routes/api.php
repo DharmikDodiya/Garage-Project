@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CarController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\GarageController;
@@ -109,5 +110,18 @@ Route::controller(GarageController::class)->middleware('type:garage owner')->pre
     Route::get('get/{id}','get');
     Route::get('search-garage','searchingGarage');
 });
+
+/**
+ * Car Route
+ */
+Route::controller(CarController::class)->middleware('type:customer')->prefix('car')->group(function(){
+    Route::post('create','create');
+    Route::get('list','list');
+    Route::patch('update/{id}','update');
+    Route::delete('delete/{id}','delete');
+    Route::get('get/{id}','get');
+});
+
+
 
 });
