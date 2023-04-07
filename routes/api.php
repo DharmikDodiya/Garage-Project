@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\GarageController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
@@ -58,7 +59,7 @@ Route::controller(UserController::class)->group(function(){
 Route::controller(CountryController::class)->middleware(['type:admin'])->prefix('country')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
-    Route::patch('update/{id}','update');
+    Route::patch('update/{country}','update');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
 });
@@ -69,7 +70,7 @@ Route::controller(CountryController::class)->middleware(['type:admin'])->prefix(
 Route::controller(StateController::class)->middleware(['type:admin'])->prefix('state')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
-    Route::patch('update/{id}','update');
+    Route::patch('update/{state}','update');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
 });
@@ -80,7 +81,7 @@ Route::controller(StateController::class)->middleware(['type:admin'])->prefix('s
 Route::controller(CityController::class)->middleware(['type:admin'])->prefix('city')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
-    Route::patch('update/{id}','update');
+    Route::patch('update/{city}','update');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
 });
@@ -88,12 +89,25 @@ Route::controller(CityController::class)->middleware(['type:admin'])->prefix('ci
 /**
  * ServiceType Routes
  */
-Route::controller(ServiceTypeController::class)->prefix('service-type')->group(function(){
+Route::controller(ServiceTypeController::class)->middleware('type:garage owner')->prefix('service-type')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
-    Route::patch('update/{id}','update');
+    Route::patch('update/{servicetype}','update');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
+});
+
+
+/**
+ * Garage Routes
+ */
+Route::controller(GarageController::class)->middleware('type:garage owner')->prefix('garage')->group(function(){
+    Route::post('create','create');
+    Route::get('list','list');
+    Route::patch('update/{garage}','update');
+    Route::delete('delete/{id}','delete');
+    Route::get('get/{id}','get');
+    Route::get('search-garage','searchingGarage');
 });
 
 });

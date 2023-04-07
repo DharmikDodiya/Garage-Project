@@ -41,13 +41,13 @@ class StateController extends Controller
     /**
      * update State
      */
-    public function update(Request $request,State $id){
+    public function update(Request $request,State $state){
         $request->validate([
-            'state_name'          => 'string|unique:states,state_name,except,id',
+            'state_name'          => 'string|unique:states,state_name,id'.$state->id,
         ]);
-        if($id){
-            $id->update($request->only('state_name'));
-            return success('Your State Is Updated SuccessFully',$id);
+        if($state){
+            $state->update($request->only('state_name'));
+            return success('Your State Is Updated SuccessFully',$state);
         }
         return error('Your State Is Not Updated',type:'notfound');
     }

@@ -13,7 +13,7 @@ trait ListingApiTrait
         $this->validate(request(), [
         'page'          => 'integer|nullable',
         'perPage'       => 'integer|nullable',
-        'search'        => 'nullable|string',
+        'search'        => 'nullable',
     ]);
         return true;
     }
@@ -26,10 +26,10 @@ trait ListingApiTrait
         if (request()->search) {
             $search = request()->search;
             $query  = $query->where(function ($q) use ($search, $searchable_fields) {
-                
                 /* adding searchable fields to orwhere condition */
                 foreach ($searchable_fields as $searchable_field) {
                     $q->orWhere($searchable_field, 'like', '%'.$search.'%');
+                    $q->orWhere($searchable_field,$search);
                 }
             });
         }

@@ -16,4 +16,18 @@ class ServiceType extends Model
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * Many To Many Relation On Users
+     */
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
+
+    /**
+     * Many To Many Relation On Garages
+     */
+    public function garages(){
+        return $this->belongsToMany(Garage::class);
+    }
 }

@@ -40,13 +40,13 @@ class CountryController extends Controller
     /**
      * update Country
      */
-    public function update(Request $request,Country $id){
+    public function update(Request $request,Country $country){
         $request->validate([
-            'country_name'          => 'string|unique:countries,country_name,except,id',
+            'country_name'          => 'string|unique:countries,country_name,id'.$country->id,
         ]);
-        if($id){
-            $id->update($request->only('country_name'));
-            return success('Your Country Is Updated SuccessFully',$id);
+        if($country){
+            $country->update($request->only('country_name'));
+            return success('Your Country Is Updated SuccessFully',$country);
         }
         return error('Your Country Is Not Updated',type:'notfound');
     }

@@ -40,13 +40,13 @@ class CityController extends Controller
     /**
      * update City
      */
-    public function update(Request $request,City $id){
+    public function update(Request $request,City $city){
         $request->validate([
-            'city_name'          => 'string|unique:cities,city_name,except,id',
+            'city_name'          => 'string|unique:cities,city_name,id'.$city->id,
         ]);
-        if($id){
-            $id->update($request->only('city_name'));
-            return success('Your City Is Updated SuccessFully',$id);
+        if($city){
+            $city->update($request->only('city_name'));
+            return success('Your City Is Updated SuccessFully',$city);
         }
         return error('Your City Is Not Updated',type:'notfound');
     }

@@ -38,13 +38,13 @@ class ServiceTypeController extends Controller
     /**
      * update ServiceType
      */
-    public function update(Request $request,ServiceType $id){
+    public function update(Request $request,ServiceType $servicetype){
         $request->validate([
-            'service_name'          => 'string|unique:service_types,service_name',
+            'service_name'          => 'string|unique:service_types,service_name,id'.$servicetype->id,
         ]);
-        if($id){
-            $id->update($request->only('service_name'));
-            return success('Your ServiceType Is Updated SuccessFully',$id);
+        if($servicetype){
+            $servicetype->update($request->only('service_name'));
+            return success('Your ServiceType Is Updated SuccessFully',$servicetype);
         }
         return error('Your ServiceType Is Not Updated',type:'notfound');
     }
