@@ -68,7 +68,7 @@ class StateController extends Controller
      * Get State By Id
      */
     public function get($id){
-        $state = State::find($id);
+        $state = State::with('cities')->find($id);
         if($state){
         return success('Get State Data By ID',$state);
        }

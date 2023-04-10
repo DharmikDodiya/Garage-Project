@@ -24,4 +24,11 @@ class City extends Model
     public function state(){
         return $this->belongsTo(State::class);
     }
+
+    /**
+     * Get Country By City id hasOneThrough relation
+     */
+    public function country(){
+        return $this->hasOneThrough(Country::class,State::class,'country_id','id');
+    }
 }

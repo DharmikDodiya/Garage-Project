@@ -32,8 +32,9 @@ class UserController extends Controller
      * User Profile
      */
     public function userProfile(){
-        $user = Auth::user();
-
+        $user_id = Auth::user()->id;
+        //dd($user_id);
+        $user = User::with('garage','serviceTypes','cars')->find($user_id);
         if(isset($user)){
             return Success('user profile',$user);
         }

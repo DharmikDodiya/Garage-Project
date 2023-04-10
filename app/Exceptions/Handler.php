@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function register()
     {
     //     $this->renderable(function (Throwable $exception, $request) {
     //         $user_id = 1;

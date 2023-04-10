@@ -67,7 +67,7 @@ class CountryController extends Controller
      * Get Country By Id
      */
     public function get($id){
-        $country = Country::find($id);
+        $country = Country::with('states','cities')->find($id);
         if($country){
             return success('Get Country Data By ID',$country);
         }

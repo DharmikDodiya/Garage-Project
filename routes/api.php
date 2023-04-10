@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\CarServicingJobController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\GarageController;
 use App\Http\Controllers\ServiceTypeController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
+use App\Models\CarServicingJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -71,7 +73,7 @@ Route::controller(CountryController::class)->middleware(['type:admin'])->prefix(
 Route::controller(StateController::class)->middleware(['type:admin'])->prefix('state')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
-    Route::patch('update/{state}','update');
+    Route::patch('update/{state}','update')->withoutMiddleware('type');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
 });
@@ -103,13 +105,15 @@ Route::controller(ServiceTypeController::class)->middleware('type:garage owner')
  * Garage Routes
  */
 Route::controller(GarageController::class)->middleware('type:garage owner')->prefix('garage')->group(function(){
+    Route::post('search-garage','searchingGarage')->withoutMiddleware('type:garage owner');
     Route::post('create','create');
+    Route::post('create-mechanic','createMechanic');
     Route::get('list','list');
     Route::patch('update/{garage}','update');
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
-    Route::get('search-garage','searchingGarage');
 });
+
 
 /**
  * Car Route
@@ -122,6 +126,13 @@ Route::controller(CarController::class)->middleware('type:customer')->prefix('ca
     Route::get('get/{id}','get');
 });
 
-
+/**
+ * CarServicingJobs Route
+ */
+Route::controller(CarServicingJobController::class)->prefix('car-servicing-job')->group(function(){
+    Route::post('create','create')->middleware('type:garage owner');
+    Route::get('list','list')->middleware('type:mechanic');
+    Route::patch('update/{id}','update')->middleware('type:mechanic');
+});
 
 });

@@ -60,4 +60,18 @@ class User extends Authenticatable
     public function serviceTypes(){
         return $this->belongsToMany(ServiceType::class,'user_service_types','user_id','service_type_id');
     }
+
+    /**
+     * User Garage relation one to one
+     */
+    public function garage(){
+        return $this->hasOne(Garage::class,'owner_id','id');
+    }
+
+    /**
+     * User Car relationship oneToMany
+     */
+    public function cars(){
+        return $this->hasMany(Car::class,'owner_id','id');
+    }
 }

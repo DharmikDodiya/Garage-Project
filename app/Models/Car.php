@@ -21,4 +21,11 @@ class Car extends Model
     public function carServicings(){
         return $this->belongsToMany(ServiceType::class,'car_servicings','car_id','service_type_id')->withPivot('garage_id');
     }
+ 
+    /**
+     * Car Relation To User
+     */
+    public function user(){
+        return $this->belongsTo(User::class,'owner_id');
+    }
 }

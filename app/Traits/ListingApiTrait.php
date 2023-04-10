@@ -20,6 +20,26 @@ trait ListingApiTrait
 
     public function filterSearchPagination($query, $searchable_fields)
     {
+
+        if(request()->country){
+            $query->where('country_id',request()->country);
+        }
+
+        if(request()->state){
+            $query->where('state_id',request()->state);
+        }
+
+        if(request()->city){
+            $query->where('city_id',request()->city);
+        }
+
+        if(isset(request()->service_type)){
+            $query->whereHas('serviceTypes', function ($q) use ($query) {
+                $q->where('service_type_id', request()->service_type);
+            });
+        }
+
+
         /**
          * Search with searchable fields
          */
