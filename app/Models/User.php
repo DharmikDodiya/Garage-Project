@@ -30,7 +30,8 @@ class User extends Authenticatable
         'password',
         'city_id',
         'token',
-        'service_type_id'
+        'service_type_id',
+        'garage_id'
     ];
 
     /**

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Car;
 use App\Models\CarServicing;
 use App\Models\CarServicingJob;
 use App\Models\User;
+use App\Notifications\CarStatusNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,8 +67,15 @@ class CarServicingJobController extends Controller
 
         $mechanic = User::where('id',Auth::user()->id)->first();
         $car_servicing_job = CarServicingJob::where('mechanic_id',$mechanic->id)->find($id);
+        
         if(isset($car_servicing_job)){
             $car_servicing_job->update($request->only('status'));
+
+            //Send Car Status Notification To Car Owner 
+            $car_servicing_id = CarServicing::where('id',$car_servicing_job->car_servicing_id)->first();
+            $car = Car::where('id',$car_servicing_id->car_id)->first();
+            $owner = User::where('id',$car->owner_id)->first();
+            $owner->notify(new CarStatusNotification($owner,$car_servicing_job,$car));
             return success('Car Servicing Job Updated SuccessFully',$car_servicing_job);
         }
         return error('Car Servicing Job Status Not Updated');

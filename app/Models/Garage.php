@@ -19,7 +19,7 @@ class Garage extends Model
         'city_id',
         'country_id',
         'state_id',
-        'owner_id'
+        'owner_id',
     ];
 
     /**
