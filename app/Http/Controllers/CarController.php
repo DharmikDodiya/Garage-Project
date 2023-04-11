@@ -28,7 +28,7 @@ class CarController extends Controller
     }
 
     /**
-     * Update Cars
+     * Update Car
      */
     public function update(Request $request ,$id){
         $request->validate([
@@ -38,28 +38,27 @@ class CarController extends Controller
             'garage_id'             => 'exists:garages,id',
             'service_type_id'       => 'array|exists:service_types,id'
         ]);
-        //dd($request);
-        $car = Car::where('owner_id',Auth::user()->id)->find($id);
-        //dd($car);
-        if(isset($car)){
-            $car->update($request->only('company_name','model_name','manufacturing_year'));
+
+        $car = Car::where('owner_id',Auth::user()->id)->findOrFail($id);
+        
+            $car->update([
+                'company_name'          => $request->company_name,
+                'model_name'            => $request->model_name,
+                'manufacturing_year'    => $request->manufacturing_year
+            ]);
             $car->carServicings()->attach($request->service_type_id,$request->only('garage_id'));
             return success('Car Updated SuccessFully',$car);
-        }
-        return error('Car Not Found',type:'notfound');
+
     }
 
     /**
      * Delete Car
      */
     public function delete($id){
-        $car = Car::where('owner_id',Auth::user()->id)->find($id);
-        if(isset($car)){
+        $car = Car::where('owner_id',Auth::user()->id)->findOrFail($id);
             $car->delete();
             $car->carServicings()->detach();
             return success('Car Deleted SuccessFully');
-        }
-        return error('Car Not Found',type:'notfound');
     }
 
     /**
@@ -74,11 +73,8 @@ class CarController extends Controller
      * Get Car
      */
     public function get($id){
-        $car = Car::where('owner_id',Auth::user()->id)->with('user')->find($id);
-        if(isset($car)){
-            return success('Car Details',$car);
-        }
-        return error('Car not found',type:'notfound');
+        $car = Car::where('owner_id',Auth::user()->id)->with('carServicings','user')->findOrFail($id);
+        return success('Car Details',$car);
     }
 
 }

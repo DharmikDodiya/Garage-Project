@@ -47,38 +47,42 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-    //     $this->renderable(function (Throwable $exception, $request) {
-    //         $user_id = 1;
+        $this->renderable(function (Throwable $exception, $request) {
+            $user_id = 1;
             
-    //         if (Auth::user()) {
-    //             $user_id = Auth::user()->id;
-    //         }
-    //         //dd($user_id);
-    //         $data = array(
-    //             'user_id'   => $user_id,
-    //             'code'      => $exception->getCode(),
-    //             'file'      => $exception->getFile(),
-    //             'line'      => $exception->getLine(),
-    //             'message'   => $exception->getMessage(),
-    //             'trace'     => $exception->getTraceAsString(),
-    //         );
-    //         //dd($data);
-    //         Error::create($data);
-    //         //return 'ok';
+            if (Auth::user()) {
+                $user_id = Auth::user()->id;
+            }
+            //dd($user_id);
+            $data = array(
+                'user_id'   => $user_id,
+                'code'      => $exception->getCode(),
+                'file'      => $exception->getFile(),
+                'line'      => $exception->getLine(),
+                'message'   => $exception->getMessage(),
+                'trace'     => $exception->getTraceAsString(),
+            );
+            //dd($data);
+           try {
+            Error::create($data);
+           } catch (\Throwable $th) {
+              return success("",$th->getMessage());
+           }
+            //return 'ok';
             
-    //         if($exception instanceof AuthenticationException)
-    //         {
-    //             return error("Can't access this page without Login!!!",type:'unauthenticated');
-    //         }
-    //        else if($exception instanceof RouteNotFoundException)
-    //         {
-    //             return error("Can't access this page without Login!!!",type:'unauthenticated');
-    //         }
+            if($exception instanceof AuthenticationException)
+            {
+                return error("Can't access this page without Login!!!",type:'unauthenticated');
+            }
+           else if($exception instanceof RouteNotFoundException)
+            {
+                return error("Not Result Query For Your Request!!!",type:'routenotfound');
+            }
 
-    //         else if($exception instanceof NotFoundHttpException)
-    //         {
-    //             return error(type:'notfound');
-    //         }
-    // });
+            else if($exception instanceof NotFoundHttpException)
+            {
+                return error('No Result Query For Your Request',type:'notfound');
+            }
+    });
     }
 }

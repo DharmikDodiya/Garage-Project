@@ -18,6 +18,9 @@ class Car extends Model
         'manufacturing_year'
     ];  
 
+    /**
+     * car relation to carservicing
+     */
     public function carServicings(){
         return $this->belongsToMany(ServiceType::class,'car_servicings','car_id','service_type_id')->withPivot('garage_id');
     }
@@ -28,4 +31,10 @@ class Car extends Model
     public function user(){
         return $this->belongsTo(User::class,'owner_id');
     }
+
+
+    // public function carServicingJobs()
+    // {
+    //     return $this->hasManyThrough(CarServicingJob::class,'car_servicings','car_id','car_service_type');
+    // }
 }

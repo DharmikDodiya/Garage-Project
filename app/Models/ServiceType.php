@@ -21,13 +21,13 @@ class ServiceType extends Model
      * Many To Many Relation On Users
      */
     public function users(){
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class,'user_service_types','service_type_id','user_id');
     }
 
     /**
      * Many To Many Relation On Garages
      */
     public function garages(){
-        return $this->belongsToMany(Garage::class);
+        return $this->belongsToMany(Garage::class,'garage_service_types','service_type_id','garage_id');
     }
 }

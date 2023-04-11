@@ -55,22 +55,16 @@ class CountryController extends Controller
      * delete Country By Id
      */
     public function delete($id){
-        $country = Country::find($id);
-        if($country){
+        $country = Country::findOrFail($id);
             $country->delete();
             return success('Country Deleted Successfully');
-        }
-        return error('Country Not Deleted');
     }
 
     /**
      * Get Country By Id
      */
     public function get($id){
-        $country = Country::with('states','cities')->find($id);
-        if($country){
+        $country = Country::with('states','cities')->findOrFail($id);
             return success('Get Country Data By ID',$country);
-        }
-        return error('Record Not Found',type:'notfound');
     }
 }

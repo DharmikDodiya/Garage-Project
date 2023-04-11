@@ -33,12 +33,9 @@ class UserController extends Controller
      */
     public function userProfile(){
         $user_id = Auth::user()->id;
-        //dd($user_id);
         $user = User::with('garage','serviceTypes','cars')->find($user_id);
-        if(isset($user)){
-            return Success('user profile',$user);
-        }
-        return error('Not User Login',type:'unauthenticated');
+        return Success('user profile',$user);
+        
     }
 
     public function logout(){

@@ -60,7 +60,7 @@ class AuthController extends Controller
             'profile_picture'   => $profile_picture,
             'token'             => Str::random(64),
         ]);
-        //dd($request->service_type_id);
+       
         if($request->type == 'mechanic'){
             $user->serviceTypes()->attach($request->service_type_id);
         }

@@ -26,7 +26,7 @@ class CarServicingJobController extends Controller
 
         $mechanic = User::where('id',$request->mechanic_id)->first();
         $car_servicing = CarServicing::where([['id',$request->car_servicing_id],['garage_id',Auth::user()->garage_id]])->first();
-
+        //dd(Auth::user()->garage_id);
         if($mechanic->type == 'mechanic' && $car_servicing){
             $carservicingjob = CarServicingJob::where([['car_servicing_id',$request->car_servicing_id],['mechanic_id',$request->mechanic_id]])->first();
             if(!is_null($carservicingjob)){
@@ -76,7 +76,7 @@ class CarServicingJobController extends Controller
             $car = Car::where('id',$car_servicing_id->car_id)->first();
             $owner = User::where('id',$car->owner_id)->first();
             $owner->notify(new CarStatusNotification($owner,$car_servicing_job,$car));
-            return success('Car Servicing Job Updated SuccessFully',$car_servicing_job);
+            return success('Car Servicing Job Updated SuccessFully And Send Notification To Car Owner',$car_servicing_job);
         }
         return error('Car Servicing Job Status Not Updated');
     }

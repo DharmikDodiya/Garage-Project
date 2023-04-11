@@ -56,22 +56,16 @@ class StateController extends Controller
      * delete State By Id
      */
     public function delete($id){
-        $state = State::find($id);
-        if($state){
-            $state->delete();
-            return success('State Deleted Successfully');
-        }
-        return error('State Not Deleted');
+        $state = State::findOrFail($id);
+        $state->delete();
+        return success('State Deleted Successfully');
     }
 
     /**
      * Get State By Id
      */
     public function get($id){
-        $state = State::with('cities')->find($id);
-        if($state){
+        $state = State::with('country','cities')->findOrFail($id);
         return success('Get State Data By ID',$state);
-       }
-       return error('Rocord Not Found',type:'notfound');
     }
 }

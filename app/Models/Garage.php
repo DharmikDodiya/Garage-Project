@@ -37,6 +37,9 @@ class Garage extends Model
         return $this->belongsToMany(ServiceType::class,'garage_service_types','garage_id','service_type_id');
     }
 
+    /**
+     * garage relation user
+     */
     public function user(){
         return $this->belongsTo(User::class,'owner_id');
     }

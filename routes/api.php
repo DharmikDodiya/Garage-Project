@@ -92,7 +92,7 @@ Route::controller(CityController::class)->middleware(['type:admin'])->prefix('ci
 /**
  * ServiceType Routes
  */
-Route::controller(ServiceTypeController::class)->middleware('type:garage owner')->prefix('service-type')->group(function(){
+Route::controller(ServiceTypeController::class)->middleware('type:admin')->prefix('service-type')->group(function(){
     Route::post('create','create');
     Route::get('list','list');
     Route::patch('update/{servicetype}','update');

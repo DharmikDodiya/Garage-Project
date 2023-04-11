@@ -53,22 +53,16 @@ class ServiceTypeController extends Controller
      * delete ServiceType By Id
      */
     public function delete($id){
-        $servicetype = ServiceType::find($id);
-        if($servicetype){
-            $servicetype->delete();
-            return success('ServiceType Deleted Successfully');
-        }
-        return error('ServiceType Not Deleted',type:'notfound');
+        $servicetype = ServiceType::findOrFail($id);
+        $servicetype->delete();
+        return success('ServiceType Deleted Successfully');
     }
 
     /**
      * Get ServiceType By Id
      */
     public function get($id){
-        $servicetype = ServiceType::find($id);
-        if($servicetype){
-            return success('Get ServiceType Data By ID',$servicetype);
-        }
-        return error('Record Not Found',type:'notfound');
+        $servicetype = ServiceType::with('garages','users')->findOrFail($id);
+        return success('Get ServiceType Data By ID',$servicetype);
     }
 }

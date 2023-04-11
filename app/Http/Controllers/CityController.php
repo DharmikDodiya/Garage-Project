@@ -55,23 +55,17 @@ class CityController extends Controller
      * delete City By Id
      */
     public function delete($id){
-        $city = City::find($id);
-        if($city){
-            $city->delete();
-            return success('City Deleted Successfully');
-        }
-        return error('City Not Deleted');
+        $city = City::findOrFail($id);
+        $city->delete();
+        return success('City Deleted Successfully');
     }
 
     /**
      * Get State By Id
      */
     public function get($id){
-        $city = City::with('country')->find($id);
-        if($city){
+        $city = City::with('state','country')->findOrFail($id);
         return success('Get City Data By ID',$city);
-        }
-        return error('Record Not Found',type:'notfound');
     }
 
 }

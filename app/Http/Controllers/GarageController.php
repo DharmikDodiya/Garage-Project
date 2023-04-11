@@ -38,7 +38,7 @@ class GarageController extends Controller
         ]);
         $garage->serviceTypes()->attach($request->service_type_id);
         
-        return success('Garage Create SuccessFully and Also Update User Type And Profile');
+        return success('Garage Create SuccessFully ',$garage);
     }
 
     /**
@@ -93,11 +93,8 @@ class GarageController extends Controller
      * Get All Garage Details By garage id  
      */
     public function get($id){
-        $garage = Garage::where('owner_id',Auth::user()->id)->with('user','serviceTypes')->find($id);
-        if(isset($garage)){
+        $garage = Garage::where('owner_id',Auth::user()->id)->with('user','serviceTypes')->findOrFail($id);
             return success('Garage Details',$garage);
-        }
-        return error('garage Details Not Found');
     }
 
 
@@ -105,13 +102,10 @@ class GarageController extends Controller
      * Delete Garage 
      */
     public function delete($id){
-        $garage = Garage::where('owner_id',Auth::user()->id)->find($id);
-        if($garage){
+        $garage = Garage::where('owner_id',Auth::user()->id)->findOrFail($id);
             $garage->delete();
             $garage->serviceTypes()->detach();
             return success('Garage Deleted SuccessFully');
-        }
-        return error('Garage Not Deleted',type:'notfound');
     }
 
     /**
