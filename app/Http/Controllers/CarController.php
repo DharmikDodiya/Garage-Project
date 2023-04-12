@@ -73,7 +73,7 @@ class CarController extends Controller
      * Get Car
      */
     public function get($id){
-        $car = Car::where('owner_id',Auth::user()->id)->with('carServicings','user')->findOrFail($id);
+        $car = Car::where('owner_id',Auth::user()->id)->with('carServicingJobs')->findOrFail($id);
         return success('Car Details',$car);
     }
 

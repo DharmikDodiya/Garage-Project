@@ -33,8 +33,8 @@ class Car extends Model
     }
 
 
-    // public function carServicingJobs()
-    // {
-    //     return $this->hasManyThrough(CarServicingJob::class,'car_servicings','car_id','car_service_type');
-    // }
+    public function carServicingJobs()
+    {
+        return $this->hasManyThrough(CarServicingJob::class,CarServicing::class,'car_id','car_servicing_id');
+    }
 }

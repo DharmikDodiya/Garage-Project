@@ -13,7 +13,7 @@ class CarServicing extends Model
         'car_id',
         'service_type_id'
     ];
-
     
+
 
 }
