@@ -26,8 +26,6 @@ use function PHPSTORM_META\type;
 |
 */
 
-
-
 /**
  * UnAuthenicated Routes
  */
@@ -54,7 +52,6 @@ Route::controller(UserController::class)->group(function(){
     Route::get('user-profile','userProfile');
     Route::get('logout','logout');
 });
-
 
 /**
  * Country Routes
@@ -100,6 +97,11 @@ Route::controller(ServiceTypeController::class)->middleware('type:admin')->prefi
     Route::get('get/{id}','get');
 });
 
+/**
+ * Mechanic Add Customers and Car Details
+ */
+    Route::post('add-customer',[GarageController::class,'addCustomer'])->middleware('type:mechanic');
+    Route::post('add-car',[GarageController::class,'addCar'])->middleware('type:mechanic');
 
 /**
  * Garage Routes
@@ -113,7 +115,6 @@ Route::controller(GarageController::class)->middleware('type:garage owner')->pre
     Route::delete('delete/{id}','delete');
     Route::get('get/{id}','get');
 });
-
 
 /**
  * Car Route

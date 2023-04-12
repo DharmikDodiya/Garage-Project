@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Car;
 use App\Models\User;
 use App\Models\Garage;
 use Illuminate\Support\Str;
@@ -158,5 +159,63 @@ class GarageController extends Controller
         $mechanic->notify(new EmailVerifyMailNotification($mechanic));       
         $token = $mechanic->createToken('API Token')->accessToken; 
         return success('Mechanic Add SuccessFully',$mechanic);
+    }
+
+    /**
+     * Mechanic Add Customer And Also Add Car Details
+     */
+    public function addCustomer(Request $request){
+        $request->validate([
+            'first_name'            => 'required|string|min:3|max:30',
+            'last_name'             => 'required|string|min:3|max:30',
+            'email'                 => 'required|email|unique:users,email',
+            'password'              => 'required|min:8|max:12|same:password_confirmation',
+            'type'                  => 'required|in:customer|string',
+            'billable_name'         => 'required_if:type,customer|string|min:3|max:40',
+            'address1'              => 'required',
+            'address2'              => 'nullable',
+            'zip_code'              => 'required|numeric|digits:6',
+            'phone'                 => 'required|numeric|digits:10|unique:users,phone',
+            'profile_picture'       => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
+            'city_id'               => 'required|exists:cities,id',
+            'garage_id'             => 'nullable|exists:garages,id',
+            'password_confirmation' => 'required'
+        ],[
+            'in'        => 'The :attribute must be one of the following types: :values',
+        ]);
+
+        $profile_picture = $request->file('profile_picture')->storeAs('images', $request->profile_picture->getClientOriginalName());
+        $user = User::create($request->only(['first_name','last_name','email','type','billable_name','address1','address2',
+        'zip_code','phone','city_id'])+
+        [
+            'password'          => Hash::make($request->password),
+            'profile_picture'   => $profile_picture,
+            'token'             => Str::random(64),
+        ]);
+        $user->notify(new WelcomeMailNotification($user));
+        $user->notify(new EmailVerifyMailNotification($user));
+        $token = $user->createToken('API Token')->accessToken; 
+        return success('Customer Data Registered SuccessFUlly',$user);
+    }
+
+    public function addCar(Request $request){
+        $request->validate([
+            'company_name'          => 'required|string|max:30',
+            'model_name'            => 'required|string|max:40',
+            'manufacturing_year'    => 'required|numeric',
+            'owner_id'              => 'required|exists:users,id',
+            //'garage_id'             => 'exists:garages,id',
+            'service_type_id'       => 'required|array|exists:service_types,id'
+        ]);
+        
+        $service_type_ids = $request->service_type_id;
+        $garage_id = Auth::user()->garage_id;
+
+        if(!is_null($garage_id)){
+            $car = Car::create($request->only(['company_name','model_name','manufacturing_year','owner_id']));
+            $car->carServicings()->attach($service_type_ids,[ 'garage_id' => $garage_id]);
+            return success('Car Add SuccessFully',$car);
+        }
+        return error('Mechanic Not Working Any Garage');
     }
 }
