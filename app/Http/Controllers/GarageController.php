@@ -204,7 +204,6 @@ class GarageController extends Controller
             'model_name'            => 'required|string|max:40',
             'manufacturing_year'    => 'required|numeric',
             'owner_id'              => 'required|exists:users,id',
-            //'garage_id'             => 'exists:garages,id',
             'service_type_id'       => 'required|array|exists:service_types,id'
         ]);
         
