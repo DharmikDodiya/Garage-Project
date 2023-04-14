@@ -71,7 +71,6 @@ class AuthController extends Controller
     }
 
     public function verifyAccount($token){
-        //dd($token);
         $verifyuser = User::where('token',$token)->first();
 
         if(!is_null($verifyuser)){

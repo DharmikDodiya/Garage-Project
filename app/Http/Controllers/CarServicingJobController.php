@@ -26,7 +26,6 @@ class CarServicingJobController extends Controller
 
         $mechanic = User::where('id',$request->mechanic_id)->first();
         $car_servicing = CarServicing::where([['id',$request->car_servicing_id],['garage_id',Auth::user()->garage_id]])->first();
-        //dd(Auth::user()->garage_id);
         if($mechanic->type == 'mechanic' && $car_servicing){
             $carservicingjob = CarServicingJob::where([['car_servicing_id',$request->car_servicing_id],['mechanic_id',$request->mechanic_id]])->first();
             if(!is_null($carservicingjob)){

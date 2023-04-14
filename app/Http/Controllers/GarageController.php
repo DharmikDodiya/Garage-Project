@@ -30,9 +30,8 @@ class GarageController extends Controller
             'city_id'           => 'required|exists:cities,id|numeric',
             'service_type_id'   => 'required|array|exists:service_types,id'
         ]);
-        //dd($request);
+        
         $owner_id = Auth::user()->id;
-        //dd($owner_id);
         $garage = Garage::create($request->only(['garage_name','address1','address2','zip_code','country_id','state_id','city_id'])
         +[
             'owner_id'      => $owner_id,
@@ -133,7 +132,6 @@ class GarageController extends Controller
         
         $user_id = Auth::user()->id;
         $garage = Garage::where('owner_id',$user_id)->first();
-        // dd($garage->id);
         $garage_id = $garage->id;
         $profile_picture = $request->file('profile_picture')->storeAs('images', $request->profile_picture->getClientOriginalName());
         $mechanic = User::create($request->only([
